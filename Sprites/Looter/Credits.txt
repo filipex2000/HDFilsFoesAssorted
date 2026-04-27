@@ -1,0 +1,29 @@
+Made by CarThief.
+Usage: Use as you like for non-commercial purposes. Credit is optional but appreciated.
+Notes: Some firing frames might be Truecolour PNG. Firing brightmaps are Truecolour PNG.
+
+-ArmorGunner: The 'Gunner', but with a shield.
+-Grenade:     Zombie with shoulder-fired rocket/grenade launcher.
+-Gunner:      Big zombie with a machinegun.
+-Hoarder:     Big zombie with backpack and rocket launcher.
+-Impactor:    Big zombie with mini-missile gun.
+-Insurgent:   Zombie with bandana and grenade launcher.
+-Kamikaze:    Big zombie with backpack full of TNT.
+-Looter:      Zombie with rifle and backpack.
+-Medic:       Zombie with a gun that can heal and shoot.
+-Pipebomb:    Dodge-rolling pipebomb-throwing zombie.
+-Riot:        Big riot surpressing zombie with tazer and riot shield.
+
+-SOURCES/CREDITS-
+
+ArmorGunner:  See credits for 'Gunner', but in addition also uses riot shield from Zim's GZDoom3 mod.
+Grenade:      Rocket Zombie from Realm667 as base.
+Gunner:       Base is Berserker Commando from Realm667, Machinegun is from LMG Zombie By Ron_Dallas and also LMG Zombie by osjclatchford (sprites from Legion mod), alando1, Blox, David G., DenisBelmondo, Eriance, ItsNatureToDie, Kinsie, Minigunner, Neoworm, osjclatchford, Phi108, Vader: additional death sprites (from Beautiful Doom mod). (https://www.doomworld.com/forum/topic/73426-share-your-sprites-%F0%9F%9A%ABno-genai/?page=253)
+Hoarder:      DeeDeeOz's big mercenary guy as base (https://forum.zdoom.org/viewtopic.php?t=72748&sid=3318cc01364853381f2c2e2e3304bae2)
+Impactor:     DeeDeeOz's big mercenary guy as base (https://forum.zdoom.org/viewtopic.php?t=72748&sid=3318cc01364853381f2c2e2e3304bae2) and CaptainJ minirocket (https://www.doomworld.com/forum/topic/147601-captain-js-snapshooting-workshop-2-resource-galore/)
+Insurgent:    Base sprite is from "Zombie Variants" (bandana & cap zombie) by CyberMonday (https://forum.zdoom.org/viewtopic.php?t=78536)
+Kamikaze:     Base sprite is Berserker Commando as base with backpack & explosives.
+Looter:       Not sure, maybe by Remaker? ("Former Marine": https://www.doomworld.com/forum/topic/143129-the-menagerie-a-repository-for-ready-to-use-spritesheets/)
+Medic:        Base is Repeater Zombie from Realm667.
+Pipebomb:     Self-made Headless zombie edit, author unknown (https://www.doomworld.com/forum/topic/143129-the-menagerie-a-repository-for-ready-to-use-spritesheets/), but possibly by Solmir? (https://forum.zdoom.org/viewtopic.php?t=15080&start=31530)
+Riot:         Self-made, Berserker Commando with Hazmat Zombie tazer & shield from Xim's riot shield zombie.
