@@ -1,4 +1,4 @@
-# Description=
+# Description
 - Adds random gimmicky enemy types to spice up your average gameplay
 - Misc extra equipment dropped from the enemies (for now only Pipebombs are dropped from Pipebomb Zombieman)
 - Amazing sprites made by CarThief.
