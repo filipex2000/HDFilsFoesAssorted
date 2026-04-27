@@ -1,0 +1,12 @@
+
+
+// ------------------------------------------------------------
+// asd
+// ------------------------------------------------------------
+
+balshield/hit1 "Sounds/ShieldHit1.ogg"
+balshield/hit2 "Sounds/ShieldHit2.ogg"
+balshield/hit3 "Sounds/ShieldHit3.ogg"
+balshield/hit4 "Sounds/ShieldHit4.ogg"
+$random balshield/hit {balshield/hit1 balshield/hit2 balshield/hit3 balshield/hit4}
+$attenuation balshield/hit 0.3
