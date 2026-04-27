@@ -3,6 +3,10 @@
 - Misc extra equipment dropped from the enemies (for now only Pipebombs are dropped from Pipebomb Zombieman)
 - Amazing sprites made by CarThief.
 
+## Dependencies
+- HDestCoreLib https://github.com/HDest-Community/hdest-core-lib
+- Ugly As Sin (optional) https://github.com/HDest-Community/Ugly-as-Sin
+
 ### Foe: TNT Throwing Tyrant (TTT) (Pipebomb Zombieman)
 - Explosives expert! Chucks beeping pipebombs.
 - Terrible yet stylish shooter! Real trigger fingers and that's about that.
