@@ -1,5 +1,4 @@
-# Description
----
+# Description=
 - Adds random gimmicky enemy types to spice up your average gameplay
 - Misc extra equipment dropped from the enemies (for now only Pipebombs are dropped from Pipebomb Zombieman)
 - Amazing sprites made by CarThief.
@@ -19,7 +18,7 @@
 - Real pistolero! Point shooting training, incredible reload speed. Armed with semi-automatics, automatics and revolvers alike.
 - Hold! Relentless at keeping aim at his target.
 
-## Known Issues
 ---
+## Known Issues
 - Shield guy death is weird, currently incapacitation/ressurection is disabled to avoid spawning excessive dropped shields.
 - Looter might behave strangely with visual zombies (mld_visualzombies_noncl). There were no problems with that as far as I've tested.
