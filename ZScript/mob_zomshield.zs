@@ -1,5 +1,5 @@
 // ------------------------------------------------------------
-// Pistol guy
+// Pistol guy (with shield)
 // ------------------------------------------------------------
 class ZombieShield:HDHumanoid{
 	//tracking ammo
