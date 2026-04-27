@@ -3,6 +3,8 @@
 - Misc extra equipment dropped from the enemies (for now only Pipebombs are dropped from Pipebomb Zombieman)
 - Amazing sprites made by CarThief.
 
+![Preview](/thumbnailx4.png)
+
 ## Dependencies
 - HDestCoreLib https://github.com/HDest-Community/hdest-core-lib
 - Ugly As Sin (optional) https://github.com/HDest-Community/Ugly-as-Sin
