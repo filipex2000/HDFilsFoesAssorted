@@ -122,7 +122,7 @@ class HDBallisticShield:HDDamageHandler{
 		//HDMagicShield.Deplete(victim,max(supereffective?(blocked<<2):blocked,1),self);
 
 		
-		console.printf("BLOCKED (not bullet)  "..blocked.."    OF  "..damage+blocked);
+		//console.printf("BLOCKED (not bullet)  "..blocked.."    OF  "..damage+blocked);
 
 
 		//spawn shield debris

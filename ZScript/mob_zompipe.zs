@@ -531,8 +531,8 @@ class HDPipebombRoller:HDFragGrenadeRoller{
 	}
 	//returns true if area around us is clear of friendlies
 	bool A_CheckBlast(actor tgt=null,double checkradius=256){
-		console.printf("\cgtarget: "..target.GetClassName());
-		console.printf("\cgmaster: "..master.GetClassName());
+		//console.printf("\cgtarget: "..target.GetClassName());
+		//console.printf("\cgmaster: "..master.GetClassName());
 		if(!target)return true;
 		blockthingsiterator itt=blockthingsiterator.create(self,checkradius);
 		while(itt.next()){
