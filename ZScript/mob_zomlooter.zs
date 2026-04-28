@@ -15,10 +15,13 @@ class ZombieLooter:ZombieStormtrooper{
 		deathsound "grunt/death";
 		activesound "grunt/active";
 		tag "Zoombie Looter";
-
+		maxdropoffheight 64;
+		maxstepheight 30;
+		maxtargetrange 65536;
+		minmissilechance 24;
 		translation 1;
 		speed 7;
-		health 110;
+		health 160;
 		mass 160;
 		dropitem "";attacksound "";decal "BulletScratch";
 		painchance 240;
@@ -55,13 +58,14 @@ class ZombieLooter:ZombieStormtrooper{
 	void A_UpdateSprite(){
 		sprite=getspriteindex("CDT5");
 	}
-	void A_ZomDERP(){
-		if(!hasderp)return;
+	// Deploy DERP (maliciously)
+	void A_ZomDERP(double throwstrength=1.0){
+		if(!hasderp)return;// Double check if already used
 		hasderp=false;
 		A_StartSound("weapons/pismagclick",CHAN_WEAPON);
 		bool garbage;actor gg;
 		double cpp=cos(pitch);double spp=sin(pitch);
-		double gforce=frandom(5,15);
+		double gforce=frandom(5,15)*throwstrength;
 		[garbage,gg]=A_SpawnItemEx("EnemyDERP",
 			0,0,height-6,
 			cpp*gforce,0,-spp*gforce,
@@ -72,17 +76,34 @@ class ZombieLooter:ZombieStormtrooper{
 		DERPBot derp=DERPBot(gg);
 		derp.movestamina=0;
 	}
+	// Use a STIM, crudely setting health back to 100% (because HDDrug does not work with heart-beat-less entities) (He's a stone cold killer alright)
 	void A_ZomStim(){
-		if(!hasstim)return;
+		if(!hasstim)return;// Double check if already used
 		hasstim=false;
 		A_StartSound("misc/injection",CHAN_WEAPON,CHANF_OVERLAP);
-		GiveBody(-100);
+		GiveBody(-100); // Recover 100% of health
 		actor aa=spawn("SpentStim",pos,ALLOW_REPLACE);
 		if(!!aa){
 			aa.target=target;aa.angle=angle;aa.pitch=pitch;aa.vel=vel;
 			aa.A_StartSound("misc/stimdrop",CHAN_VOICE);
 		}
 	}
+	//Temporary stun, augmented with extra heal/deploy behaviour
+	void A_KnockedDownLooter(){
+		if(hasstim&&!random(0,10)){
+			A_ZomStim();
+			//reset stuff and get up
+			bnopain=default.bnopain;
+			if(findstate("standup"))setstatelabel("standup");
+			else if(findstate("raise"))setstatelabel("raise");
+			else setstatelabel("see");
+		} else if(hasderp&&!random(0,6)){
+			A_ZomDERP(0.1);
+		} else {
+			A_KnockedDown();
+		}
+	}
+	
 	states{
 		spawn:
 			CDT5 Z 0;
@@ -215,6 +236,22 @@ class ZombieLooter:ZombieStormtrooper{
 			}
 			---- A 0 A_JumpIf(mag<1,"reload");
 			---- A 0 setstatelabel("see");
+		falldown:
+			#### H 5;
+			#### I 5 A_Vocalize(deathsound);
+			#### JJKKK 2 A_SetSize(-1,max(deathheight,height-10));
+			#### L 0 A_SetSize(-1,deathheight);
+			#### L 10 A_KnockedDownLooter();
+			wait;
+		dead:
+			#### K 3 canraise{if(abs(vel.z)<2.)frame++;}
+			#### L 5 canraise{
+				if(abs(vel.z)>=2.)setstatelabel("dead");
+				else if(hasstim&&!random(0,10)&&RaiseActor(self)){
+					A_ZomStim();
+				}
+			}
+			wait;
 	}
 }
 

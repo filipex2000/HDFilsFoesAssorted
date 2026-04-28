@@ -2,6 +2,8 @@
 // TNT Throwing Tyrant (TTT) (Pipebomb Man)
 // ------------------------------------------------------------
 
+const ZROLLFORCE=0.5;
+
 class ZombiePipoBoom:HDHumanoid{
 	default{
 		//$Category "Monsters/Hideous Destructor"
@@ -18,10 +20,13 @@ class ZombiePipoBoom:HDHumanoid{
 		deathsound "grunt/death";
 		activesound "grunt/active";
 		tag "Pipebomb Zombie";
-
+		maxdropoffheight 64;
+		maxstepheight 30;
+		maxtargetrange 65536;
+		minmissilechance 24;
 		translation "58:66=128:136","214:223=141:148","176:191=24:47","16:34=68:79";
 		speed 10;
-		health 200;
+		health 240;
 		dropitem "";attacksound "";decal "BulletScratch";
 		painchance 200;
 		obituary "$OB_ZOMBRIFLE";
@@ -54,7 +59,7 @@ class ZombiePipoBoom:HDHumanoid{
 		double dtfactor=dt/512.0;
 		bool garbage;actor gg;
 		double cpp=cos(pitch);double spp=sin(pitch);
-		double gforce=frandom(15,35)*dtfactor;
+		double gforce=frandom(15,35)*dtfactor*0.6;
 		[garbage,gg]=A_SpawnItemEx("HDPipebomb",
 			0,0,height-6,
 			cpp*gforce,0,-spp*gforce/(0.5+dtfactor),
@@ -152,6 +157,8 @@ class ZombiePipoBoom:HDHumanoid{
 				return;
 			}
 		}
+		#### E 0 A_JumpIf(!random(0,3)||(random(0,3)&&distance3d(target)>128&&A_CheckBlast())
+		,"frag");
 		#### ABCD 1 A_TurnToAim(40,shootstate:"aiming");
 		loop;
 	aiming:
@@ -161,16 +168,16 @@ class ZombiePipoBoom:HDHumanoid{
 		#### E 0 A_JumpIf(
 			(!random(0,3)&&hdmobai.TryShoot(self,32,512,0,0,flags:HDMobAI.TS_GEOMETRYOK))
 		,"roll.start");
-		#### E 0 A_JumpIf(random(0,3)&&distance3d(target)>128&&A_CheckBlast()
+		#### E 0 A_JumpIf(!random(0,3)||(random(0,3)&&distance3d(target)>128&&A_CheckBlast())
 		,"frag");
-		#### F 6 A_UpdateSprite(true);
+		#### F 3 A_UpdateSprite(true);
 		goto shoot;
 	shoot:
 		#### F 0 A_UpdateSprite(true);
 		#### F 2 A_LeadTarget(lasttargetdist*0.01,randompick(0,0,0,1),10,2);
 		#### F 0{
-			pitch+=frandom(-spread,spread);
-			angle+=frandom(-spread,spread);
+			pitch+=frandom(-spread,spread)*0.25;
+			angle+=frandom(-spread,spread)*0.25;
 		}
 	fire:
 		#### F 0 A_UpdateSprite(true);
@@ -180,18 +187,19 @@ class ZombiePipoBoom:HDHumanoid{
 				return;
 			}
 			A_StartSound("weapons/pistol",CHAN_WEAPON,1.2);
-			HDBulletActor.FireBullet(self,"HDB_9",28,speedfactor:1.0);
+			HDBulletActor.FireBullet(self,"HDB_9",28,0,1,speedfactor:1.0);
 			A_EjectSMGCasing();
 			pitch+=frandom(-0.1,0.05)*spread;
 			angle+=frandom(-0.1,0.05)*spread;
 			mag--;
 		}
+		#### F 0 A_Jump(10,"shoot");
 		#### F 2{
 			if(mag<1||!hdmobai.tryshoot(self)){
 				setstatelabel("postshot");
 			} else spread++;
 		}
-		#### F 0 A_Jump(120,"shoot");
+		#### F 0 A_Jump(200,"shoot");
 		//fallthrough to postshot
 	postshot:
 		#### F 5{
@@ -266,7 +274,7 @@ class ZombiePipoBoom:HDHumanoid{
 		#### A 0{
 			spread=2;
 		}
-		#### A 0 A_JumpIfTargetInLOS("see");
+		#### A 0 A_JumpIfTargetInLOS("missile");
 		#### A 0 A_Jump(24,"roam");
 		loop;
 	roam:
@@ -295,6 +303,7 @@ class ZombiePipoBoom:HDHumanoid{
 		#### F 1
 		{
 			if(target){
+				A_FaceTarget(50,50);
 				double dt=distance3d(target);
 				if(dt<128){
 					setstatelabel("roll.back");
@@ -314,15 +323,15 @@ class ZombiePipoBoom:HDHumanoid{
 		}
 	roll.left:
 		#### # 0 A_UpdateSprite(true);
-		#### B 4 A_ChangeVelocity(-1,5,0,CVF_RELATIVE);
-		#### C 4 A_ChangeVelocity(-2,7,0,CVF_RELATIVE);
-		#### D 4 A_ChangeVelocity(-4,10,0,CVF_RELATIVE);
-		#### E 2 A_ChangeVelocity(-3,7,0,CVF_RELATIVE);
-		#### E 2 A_ChangeVelocity(-3,6,0,CVF_RELATIVE);
-		#### F 2 A_ChangeVelocity(-2,5,0,CVF_RELATIVE);
-		#### F 3 A_ChangeVelocity(-2,3,0,CVF_RELATIVE);
-		#### F 4 A_ChangeVelocity(-1,2,0,CVF_RELATIVE);
-		#### F 4 A_ChangeVelocity(-1,2,0,CVF_RELATIVE);
+		#### B 4 A_ChangeVelocity(-1*ZROLLFORCE,5*ZROLLFORCE,0,CVF_RELATIVE);
+		#### C 4 A_ChangeVelocity(-2*ZROLLFORCE,7*ZROLLFORCE,0,CVF_RELATIVE);
+		#### D 4 A_ChangeVelocity(-4*ZROLLFORCE,10*ZROLLFORCE,0,CVF_RELATIVE);
+		#### E 2 A_ChangeVelocity(-3*ZROLLFORCE,7*ZROLLFORCE,0,CVF_RELATIVE);
+		#### E 2 A_ChangeVelocity(-3*ZROLLFORCE,6*ZROLLFORCE,0,CVF_RELATIVE);
+		#### F 2 A_ChangeVelocity(-2*ZROLLFORCE,5*ZROLLFORCE,0,CVF_RELATIVE);
+		#### F 3 A_ChangeVelocity(-2*ZROLLFORCE,3*ZROLLFORCE,0,CVF_RELATIVE);
+		#### F 4 A_ChangeVelocity(-1*ZROLLFORCE,2*ZROLLFORCE,0,CVF_RELATIVE);
+		#### F 4 A_ChangeVelocity(-1*ZROLLFORCE,2*ZROLLFORCE,0,CVF_RELATIVE);
 		#### E 0 A_Jump(56,"roll.start");
 		#### J 0 A_Jump(120,"shoot");
 		#### F 3 A_Vocalize(seesound);
@@ -330,15 +339,15 @@ class ZombiePipoBoom:HDHumanoid{
 		goto see;
 	roll.right:
 		#### # 0 A_UpdateSprite(true);
-		#### G 4 A_ChangeVelocity(-1,-5,0,CVF_RELATIVE);
-		#### H 4 A_ChangeVelocity(-2,-7,0,CVF_RELATIVE);
-		#### I 4 A_ChangeVelocity(-4,-10,0,CVF_RELATIVE);
-		#### J 2 A_ChangeVelocity(-3,-7,0,CVF_RELATIVE);
-		#### J 2 A_ChangeVelocity(-3,-6,0,CVF_RELATIVE);
-		#### K 2 A_ChangeVelocity(-2,-5,0,CVF_RELATIVE);
-		#### K 3 A_ChangeVelocity(-2,-3,0,CVF_RELATIVE);
-		#### K 4 A_ChangeVelocity(-1,-2,0,CVF_RELATIVE);
-		#### K 4 A_ChangeVelocity(-1,-2,0,CVF_RELATIVE);
+		#### G 4 A_ChangeVelocity(-1*ZROLLFORCE,-5*ZROLLFORCE,0,CVF_RELATIVE);
+		#### H 4 A_ChangeVelocity(-2*ZROLLFORCE,-7*ZROLLFORCE,0,CVF_RELATIVE);
+		#### I 4 A_ChangeVelocity(-4*ZROLLFORCE,-10*ZROLLFORCE,0,CVF_RELATIVE);
+		#### J 2 A_ChangeVelocity(-3*ZROLLFORCE,-7*ZROLLFORCE,0,CVF_RELATIVE);
+		#### J 2 A_ChangeVelocity(-3*ZROLLFORCE,-6*ZROLLFORCE,0,CVF_RELATIVE);
+		#### K 2 A_ChangeVelocity(-2*ZROLLFORCE,-5*ZROLLFORCE,0,CVF_RELATIVE);
+		#### K 3 A_ChangeVelocity(-2*ZROLLFORCE,-3*ZROLLFORCE,0,CVF_RELATIVE);
+		#### K 4 A_ChangeVelocity(-1*ZROLLFORCE,-2*ZROLLFORCE,0,CVF_RELATIVE);
+		#### K 4 A_ChangeVelocity(-1*ZROLLFORCE,-2*ZROLLFORCE,0,CVF_RELATIVE);
 		#### J 0 A_Jump(56,"roll.start");
 		#### J 0 A_Jump(120,"shoot");
 		#### L 3 A_Vocalize(seesound);
@@ -346,44 +355,44 @@ class ZombiePipoBoom:HDHumanoid{
 		goto see;
 	roll.forward:
 		#### # 0 A_UpdateSprite(true);
-		#### F 4 A_ChangeVelocity(5,random(-1,1),0,CVF_RELATIVE);
-		#### L 4 A_ChangeVelocity(7,random(-2,2),0,CVF_RELATIVE);
-		#### D 4 A_ChangeVelocity(10,random(-4,4),0,CVF_RELATIVE);
-		#### D 2 A_ChangeVelocity(7,random(-3,3),0,CVF_RELATIVE);
-		#### J 2 A_ChangeVelocity(6,random(-3,3),0,CVF_RELATIVE);
-		#### J 2 A_ChangeVelocity(5,random(-3,3),0,CVF_RELATIVE);
-		#### D 3 A_ChangeVelocity(3,random(-2,2),0,CVF_RELATIVE);
-		#### J 4 A_ChangeVelocity(2,random(-1,1),0,CVF_RELATIVE);
-		#### J 4 A_ChangeVelocity(2,random(-1,1),0,CVF_RELATIVE);
-		#### D 0 A_Jump(56,"roll.start");
+		#### F 4 A_ChangeVelocity(5*ZROLLFORCE,random(-1,1)*ZROLLFORCE,0,CVF_RELATIVE);
+		#### L 4 A_ChangeVelocity(7*ZROLLFORCE,random(-2,2)*ZROLLFORCE,0,CVF_RELATIVE);
+		#### D 4 A_ChangeVelocity(10*ZROLLFORCE,random(-4,4)*ZROLLFORCE,0,CVF_RELATIVE);
+		#### D 2 A_ChangeVelocity(7*ZROLLFORCE,random(-3,3)*ZROLLFORCE,0,CVF_RELATIVE);
+		#### J 2 A_ChangeVelocity(6*ZROLLFORCE,random(-3,3)*ZROLLFORCE,0,CVF_RELATIVE);
+		#### J 2 A_ChangeVelocity(5*ZROLLFORCE,random(-3,3)*ZROLLFORCE,0,CVF_RELATIVE);
+		#### D 3 A_ChangeVelocity(3*ZROLLFORCE,random(-2,2)*ZROLLFORCE,0,CVF_RELATIVE);
+		#### J 4 A_ChangeVelocity(2*ZROLLFORCE,random(-1,1)*ZROLLFORCE,0,CVF_RELATIVE);
+		#### J 4 A_ChangeVelocity(2*ZROLLFORCE,random(-1,1)*ZROLLFORCE,0,CVF_RELATIVE);
 		#### J 0 A_Jump(200,"shoot");
+		#### D 0 A_Jump(56,"roll.start");
 		#### F 3 A_Vocalize(seesound);
 		#### A 0 A_UpdateSprite(false);
 		goto see;
 	roll.back:
 		#### # 0 A_UpdateSprite(true);
-		#### F 4 A_ChangeVelocity(-5,random(-1,1),0,CVF_RELATIVE);
-		#### L 4 A_ChangeVelocity(-7,random(-2,2),0,CVF_RELATIVE);
-		#### D 4 A_ChangeVelocity(-10,random(-4,4),0,CVF_RELATIVE);
-		#### D 2 A_ChangeVelocity(-7,random(-3,3),0,CVF_RELATIVE);
-		#### J 2 A_ChangeVelocity(-6,random(-3,3),0,CVF_RELATIVE);
-		#### J 2 A_ChangeVelocity(-5,random(-3,3),0,CVF_RELATIVE);
-		#### D 3 A_ChangeVelocity(-3,random(-2,2),0,CVF_RELATIVE);
-		#### J 4 A_ChangeVelocity(-2,random(-1,1),0,CVF_RELATIVE);
-		#### J 4 A_ChangeVelocity(-2,random(-1,1),0,CVF_RELATIVE);
-		#### D 0 A_Jump(56,"roll.start");
+		#### F 4 A_ChangeVelocity(-5*ZROLLFORCE,random(-1,1)*ZROLLFORCE,0,CVF_RELATIVE);
+		#### L 4 A_ChangeVelocity(-7*ZROLLFORCE,random(-2,2)*ZROLLFORCE,0,CVF_RELATIVE);
+		#### D 4 A_ChangeVelocity(-10*ZROLLFORCE,random(-4,4)*ZROLLFORCE,0,CVF_RELATIVE);
+		#### D 2 A_ChangeVelocity(-7*ZROLLFORCE,random(-3,3)*ZROLLFORCE,0,CVF_RELATIVE);
+		#### J 2 A_ChangeVelocity(-6*ZROLLFORCE,random(-3,3)*ZROLLFORCE,0,CVF_RELATIVE);
+		#### J 2 A_ChangeVelocity(-5*ZROLLFORCE,random(-3,3)*ZROLLFORCE,0,CVF_RELATIVE);
+		#### D 3 A_ChangeVelocity(-3*ZROLLFORCE,random(-2,2)*ZROLLFORCE,0,CVF_RELATIVE);
+		#### J 4 A_ChangeVelocity(-2*ZROLLFORCE,random(-1,1)*ZROLLFORCE,0,CVF_RELATIVE);
+		#### J 4 A_ChangeVelocity(-2*ZROLLFORCE,random(-1,1)*ZROLLFORCE,0,CVF_RELATIVE);
 		#### J 0 A_Jump(120,"shoot");
+		#### D 0 A_Jump(56,"roll.start");
 		#### F 3 A_Vocalize(seesound);
 		#### A 0 A_UpdateSprite(false);
 		goto see;
 	pain:
-		#### G 3 A_UpdateSprite();
+		#### G 0 A_UpdateSprite();
 		#### G 3 A_Vocalize(painsound);
-		#### G 0 A_Jump(100,"roll.start");
+		#### G 3 A_Jump(200,"roll.start");
 		#### AB 2 A_FaceTarget(50,50);
 		#### CD 3 A_ChangeVelocity(
-			frandom(-1,1),
-			frandom(1,max(0,5))*randompick(-1,1),
+			frandom(-2,2),
+			frandom(3,7)*randompick(-1,1),
 			0,CVF_RELATIVE
 		);
 		#### G 0 A_CPosRefire();

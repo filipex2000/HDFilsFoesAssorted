@@ -35,7 +35,7 @@ class ZombieShield:HDHumanoid{
 		}
 	}
 	virtual bool noammo(){
-		return (chamber<1||firemode<2)&&thismag<1;
+		return (chamber<1||firemode==2)&&thismag<1;
 	}
 
 
@@ -215,6 +215,7 @@ class ZombieShield:HDHumanoid{
 		radius 10;
 		speed 6;
 		mass 100;
+		mass 160;
 		painchance 200;
 		obituary "$OB_ZOMBPISTOL";
 		hitobituary "$OB_ZOMBPISTOL_HIT";
@@ -262,9 +263,11 @@ class ZombieShield:HDHumanoid{
 		loop;
 	hold:
 		#### E 1 A_LeadTarget(lasttargetdist*0.01,randompick(0,0,0,1),10,0);
+		#### E 0 A_JumpIf(noammo(),"reload");
 		#### E 1 A_LeadTarget(lasttargetdist*0.01,randompick(0,0,0,1),10,0);
 		#### E 2 A_HDChase("melee","shoot",CHF_NODIRECTIONTURN);
 		#### E 1 A_LeadTarget(lasttargetdist*0.01,randompick(0,0,0,1),10,0);
+		#### E 0 A_JumpIf(noammo(),"reload");
 		#### EEEE 3 A_Watch(15,"hold","shoot");
 	see:
 		#### ABCD random(3,4) A_HDChase("melee","missle",CHF_DONTTURN);
