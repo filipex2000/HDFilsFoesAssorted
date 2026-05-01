@@ -1,7 +1,7 @@
 
 
 // ------------------------------------------------------------
-// asd
+// Ballistic Shield
 // ------------------------------------------------------------
 
 balshield/hit1 "Sounds/ShieldHit1.ogg"
@@ -10,3 +10,19 @@ balshield/hit3 "Sounds/ShieldHit3.ogg"
 balshield/hit4 "Sounds/ShieldHit4.ogg"
 $random balshield/hit {balshield/hit1 balshield/hit2 balshield/hit3 balshield/hit4}
 $attenuation balshield/hit 0.3
+
+// ------------------------------------------------------------
+// Wither (Skelly boy)
+// ------------------------------------------------------------
+
+wither/see WITHSEE
+wither/act WITHACT
+wither/pain WITHPAIN
+wither/death WITHDTH
+wither/bones WITHBONE
+$pitchset wither/see 0.7 0.8
+$pitchset wither/act 0.8 0.9
+$pitchset wither/pain 0.7 0.9
+$pitchset wither/death 0.9 1.0
+$pitchset wither/bones 0.7 1.0
+$volume wither/bones 0.5

@@ -1,8 +1,8 @@
 // ------------------------------------------------------------
 // Jorkinit
 // ------------------------------------------------------------
-const BALSHIELD_ABSORBTION=20.;
-const BALSHIELD_PENETRATRION_THRESHOLD=20.;
+const BALSHIELD_ABSORBTION=18.;
+const BALSHIELD_PENETRATRION_THRESHOLD=18.;
 class HDBallisticShield:HDDamageHandler{
 	default{
 		+nointeraction +noblockmap
@@ -116,7 +116,8 @@ class HDBallisticShield:HDDamageHandler{
 		
 		//if(!stamina)stamina=maxamount;
 
-		int blocked=min(damage,BALSHIELD_ABSORBTION);
+		int absorbtion=(damage<=BALSHIELD_ABSORBTION)?BALSHIELD_ABSORBTION:(BALSHIELD_ABSORBTION/2);
+		int blocked=min(damage,absorbtion);
 		damage-=blocked;
 
 		//HDMagicShield.Deplete(victim,max(supereffective?(blocked<<2):blocked,1),self);
@@ -235,8 +236,8 @@ class HDBallisticShield:HDDamageHandler{
 				*bulletpower
 				/victim.mass
 			);
-			victim.angle+=deltaangle(victim.angle,victim.angleto(bullet))*frandom(-0.005,0.03)+frandom(-0.1,0.1);
-			victim.pitch+=frandom(-1.,1.);
+			victim.angle+=deltaangle(victim.angle,victim.angleto(bullet))*frandom(-0.005,0.15)+frandom(-0.75,0.75);
+			victim.pitch+=frandom(-1.5,1.5);
 		}
 		stamina+=2;
 		return pen,penshell;

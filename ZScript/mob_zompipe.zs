@@ -26,7 +26,7 @@ class ZombiePipoBoom:HDHumanoid{
 		minmissilechance 24;
 		translation "58:66=128:136","214:223=141:148","176:191=24:47","16:34=68:79";
 		speed 10;
-		health 240;
+		health 140;
 		dropitem "";attacksound "";decal "BulletScratch";
 		painchance 200;
 		obituary "$OB_ZOMBRIFLE";
@@ -76,13 +76,13 @@ class ZombiePipoBoom:HDHumanoid{
 				wp.weaponstatus[PISS_CHAMBER]=2;
 			}
 			DropNewItem("HDHandgunRandomDrop");
-			DropNewItem("PipebombPickup",100);
-			DropNewItem("HDPipebombAmmo",100);
-			DropNewItem("HDPipebombAmmo",100);
-			DropNewItem("HDPipebombAmmo",100);
+			DropNewItem("PipebombPickup",56);
+			DropNewItem("HDPipebombAmmo",56);
+			DropNewItem("HDPipebombAmmo",56);
+			DropNewItem("HDPipebombAmmo",56);
 			
 			// Chance to drop live bomb!
-			if(random(0,2)){
+			if(!random(0,6)){
 				bool garbage;actor gg;
 				[garbage,gg]=A_SpawnItemEx("HDPipebomb",
 					0,0,height-6,
@@ -241,7 +241,8 @@ class ZombiePipoBoom:HDHumanoid{
 		#### G 4{
 			A_ZomPipebomb();
 		}
-		#### G 5 A_Jump(200,"roll.start");
+		#### G 3;
+		#### G 2 A_Jump(185,"roll.start");
 		#### G 0 A_JumpIf(hdmobai.TryShoot(self,32,512,0,0,flags:HDMobAI.TS_GEOMETRYOK), "shoot");
 		---- A 0 setstatelabel("see");
 	ohforfuckssake:
@@ -387,9 +388,10 @@ class ZombiePipoBoom:HDHumanoid{
 		goto see;
 	pain:
 		#### G 0 A_UpdateSprite();
-		#### G 3 A_Vocalize(painsound);
-		#### G 3 A_Jump(200,"roll.start");
+		#### G 6 A_Vocalize(painsound);
+		---- A 0 A_Jump(10,"roll.start");;
 		#### AB 2 A_FaceTarget(50,50);
+		---- A 0 A_Jump(100,"roll.start");;
 		#### CD 3 A_ChangeVelocity(
 			frandom(-2,2),
 			frandom(3,7)*randompick(-1,1),

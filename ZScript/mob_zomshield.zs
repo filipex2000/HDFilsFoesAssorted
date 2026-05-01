@@ -64,22 +64,23 @@ class ZombieShield:HDHumanoid{
 	
 	void A_EjectRevolverCasings(){
 		HDWeapon.EjectCasing(self,"HDSpent9mm",
-			-frandom(89,92),
+			frandom(89,92),
 			(frandom(-1.0,1.0),frandom(0.5,1.0),frandom(-1,0.5)),
 			(10,0,0)
 		);
 	}
 
 	void A_PistolZombieAttack(){
+		double spreadtotal=spread*1.5;
 		if(firemode==2){
 			if(thismag<1){
 				setstatelabel("postshot");
 				return;
 			}
-
-			pitch+=frandom(0,spread*0.75)-frandom(0,spread*0.75);
-			angle+=frandom(0,spread*0.75)-frandom(0,spread*0.75);
-			HDBulletActor.FireBullet(self,"HDB_355",32,-6,spread:2.,speedfactor:frandom(0.99,1.01));
+			A_SetTics(3);
+			pitch+=frandom(0,spreadtotal)-frandom(0,spreadtotal);
+			angle+=frandom(0,spreadtotal)-frandom(0,spreadtotal);
+			HDBulletActor.FireBullet(self,"HDB_355",32,-6,spread:16.,speedfactor:frandom(0.99,1.01));
 			
 			A_StartSound("weapons/deinoclick",8,CHANF_OVERLAP);
 			A_StartSound("weapons/deinoblast1",CHAN_WEAPON,CHANF_OVERLAP);
@@ -100,9 +101,9 @@ class ZombieShield:HDHumanoid{
 				return;
 			}
 
-			pitch+=frandom(0,spread)-frandom(0,spread);
-			angle+=frandom(0,spread)-frandom(0,spread);
-			HDBulletActor.FireBullet(self,"HDB_9",32,-6,spread:6.,speedfactor:frandom(0.97,1.03));
+			pitch+=frandom(0,spreadtotal)-frandom(0,spreadtotal);
+			angle+=frandom(0,spreadtotal)-frandom(0,spreadtotal);
+			HDBulletActor.FireBullet(self,"HDB_9",32,-6,spread:16.,speedfactor:frandom(0.97,1.03));
 
 			A_StartSound("weapons/pistol",CHAN_WEAPON);
 			pitch+=frandom(-0.8,0.3);
@@ -118,6 +119,7 @@ class ZombieShield:HDHumanoid{
 		if(bhasdropped){
 			if(firemode==2){
 				for (int i=0; i<24; i++)DropNewItem("HDRevolverAmmo",96);
+				DropNewItem("HD355BoxPickup",96);
 			} else {
 				DropNewItem("HD9mMag15",96);
 			}
@@ -174,6 +176,7 @@ class ZombieShield:HDHumanoid{
 			chamber=2;
 			A_StartSound("weapons/deinoclose",8,CHANF_OVERLAP);
 			A_StartSound("weapons/deinoload",8,CHANF_OVERLAP);
+			A_SetTics(14);
 			return true;
 		} else {
 			if(thismag>=0)return false;
@@ -204,7 +207,7 @@ class ZombieShield:HDHumanoid{
 		//$Title "Shield Zombie"
 		//$Sprite "CDT1A1"
 
-		+quicktoretaliate
+//		+quicktoretaliate
 		seesound "grunt/pistol/sight";
 		painsound "grunt/pistol/pain";
 		deathsound "grunt/pistol/death";
@@ -214,7 +217,6 @@ class ZombieShield:HDHumanoid{
 
 		radius 10;
 		speed 6;
-		mass 100;
 		mass 160;
 		painchance 200;
 		obituary "$OB_ZOMBPISTOL";
@@ -270,8 +272,8 @@ class ZombieShield:HDHumanoid{
 		#### E 0 A_JumpIf(noammo(),"reload");
 		#### EEEE 3 A_Watch(15,"hold","shoot");
 	see:
-		#### ABCD random(3,4) A_HDChase("melee","missle",CHF_DONTTURN);
-		#### ABCD 3 A_TurnToAim(2);
+		#### ABCD random(3,4) A_HDChase("melee","missle",CHF_DONTTURN|CHF_NODIRECTIONTURN);
+		#### ABCD 3 A_TurnToAim(4);
 		#### A 0 A_JumpIf(noammo(),"reload");
 		#### A 0 A_Jump(116,"roam","roam","roam","roam2","roam2");
 		loop;
@@ -288,12 +290,12 @@ class ZombieShield:HDHumanoid{
 		#### ABCD 3 A_TurnToAim(5);
 		loop;
 	shoot:
-		#### E 1 A_SetTics(min(1,int(lasttargetdist)>>5));
-		#### E 3 A_LeadTarget(lasttargetdist*0.01,randompick(0,0,0,1),10,0);
+		#### E 2 A_SetTics(min(2,int(lasttargetdist)>>5));
+		#### E 6 A_LeadTarget(lasttargetdist*0.01,randompick(0,0,0,1),10,7);
 	fire:
-		#### F 1 bright light("SHOT") A_PistolZombieAttack();
+		#### F 2 bright light("SHOT") A_PistolZombieAttack();
 	postshot:
-		#### E 1;
+		#### E random(1,2);
 		#### E 0 A_JumpIf(noammo()||!target,"nope");
 		#### E 0{
 			if(
@@ -302,19 +304,22 @@ class ZombieShield:HDHumanoid{
 				pitch+=frandom(-2.4,2);
 				angle+=frandom(-2,2);
 				setstatelabel("fire");
-			}else A_SetTics(random(2,7));
+			}else if(firemode>1) A_SetTics(random(3,8));
+			else A_SetTics(random(2,7));
 		}
-		#### E 2;
-		#### E 3 A_HDMonsterRefire("hold",25);
+		#### E 1;
+		#### E 3 A_HDMonsterRefire("hold",35);
 		goto fire;
 	nope:
 		#### E 10;
 	reload:
-		#### ABCD 4 A_HDChase("melee",null,CHF_FLEE);
+		#### ABCD 6 A_HDChase("melee",null,CHF_FLEE);
 		#### A 7 A_PistolZombieUnload();
-		#### BC 6 A_HDChase("melee",null,CHF_FLEE);
+		#### BC 8 A_HDChase("melee",null,CHF_FLEE);
 		#### D 8 A_HDReload();
-		---- A 0 setstatelabel("see");
+		#### E 2 A_FaceTarget(10);
+		#### E 2 A_FaceTarget(10);
+		---- A 0 setstatelabel("hold");
 	pain:
 		#### G 2;
 		#### G 3 A_Vocalize(painsound);

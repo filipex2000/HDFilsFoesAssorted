@@ -2,9 +2,11 @@
 // HDCoreLib Custom Lump Command API
 // ---------------------------------
 
-addSpawnTableSingleEntry => { "tableName": "ZombieManReplaces", "name": "ZombieHideousLooter", "weight": "9", "persists": "true" }
-addSpawnTableSingleEntry => { "tableName": "ZombieManReplaces", "name": "ZombiePipoBoom", "weight": "32", "persists": "true" }
+addSpawnTableSingleEntry => { "tableName": "ZombieManReplaces", "name": "ZombieHideousLooter", "weight": "6", "persists": "true" }
+addSpawnTableSingleEntry => { "tableName": "ZombieManReplaces", "name": "ZombiePipoBoom", "weight": "12", "persists": "true" }
 addSpawnTableSingleEntry => { "tableName": "ZombieManReplaces", "name": "ZombieShield", "weight": "9", "persists": "true" }
 
-addSpawnTableSingleEntry => { "tableName": "ShotgunGuyReplaces", "name": "ZombieShield", "weight": "60", "persists": "true" }
-addSpawnTableSingleEntry => { "tableName": "ShotgunGuyReplaces", "name": "ZombiePipoBoom", "weight": "9", "persists": "true" }
+addSpawnTableSingleEntry => { "tableName": "ShotgunGuyReplaces", "name": "ZombieShield", "weight": "50", "persists": "true" }
+addSpawnTableSingleEntry => { "tableName": "ShotgunGuyReplaces", "name": "ZombiePipoBoom", "weight": "6", "persists": "true" }
+
+addSpawnTableSingleEntry => { "tableName": "DoomImpReplaces", "name": "WitherSpawner", "weight": "2", "persists": "true" }

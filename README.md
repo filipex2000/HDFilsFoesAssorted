@@ -24,6 +24,9 @@
 - Real pistolero! Point shooting training, incredible reload speed. Armed with semi-automatics, automatics and revolvers alike.
 - Hold! Relentless at keeping aim at his target.
 
+### Foe: Skelly Boy (Wither)
+- Weak yet [REDACTED]
+
 ---
 ## Known Issues
 - Shield guy death is weird, currently incapacitation/ressurection is disabled to avoid spawning excessive dropped shields.

@@ -45,10 +45,12 @@ class ZombieLooter:ZombieStormtrooper{
 	override void deathdrop(){
 		if(bhasdropped&&bfriendly)return;
 		if(!bhasdropped){
-			if(HDCore.CheckClassExists("UaS_AmmoPouch"))
+			// Soft dependency on Ugly As Sin
+			name itemname = 'UaS_AmmoPouch';
+			if(HDCore.CheckClassExists(itemname))
 			{
 				if(random(0,2)) DropNewItem("WildBackpack");
-				else DropNewItem("UaS_WildAmmoPouch");
+				else DropNewItem(itemname);
 			} else {
 				DropNewItem("WildBackpack");
 			}
@@ -74,6 +76,7 @@ class ZombieLooter:ZombieStormtrooper{
 		);
 		gg.vel+=self.vel;
 		DERPBot derp=DERPBot(gg);
+		derp.DamageMobj(null,null,75,"maxhpdrain",DMG_NO_PAIN|DMG_FORCED);
 		derp.movestamina=0;
 	}
 	// Use a STIM, crudely setting health back to 100% (because HDDrug does not work with heart-beat-less entities) (He's a stone cold killer alright)
@@ -82,6 +85,9 @@ class ZombieLooter:ZombieStormtrooper{
 		hasstim=false;
 		A_StartSound("misc/injection",CHAN_WEAPON,CHANF_OVERLAP);
 		GiveBody(-100); // Recover 100% of health
+		stunned/=2;
+		bodydamage/=3;
+		bloodloss/=2;
 		actor aa=spawn("SpentStim",pos,ALLOW_REPLACE);
 		if(!!aa){
 			aa.target=target;aa.angle=angle;aa.pitch=pitch;aa.vel=vel;
