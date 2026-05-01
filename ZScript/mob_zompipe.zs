@@ -389,9 +389,9 @@ class ZombiePipoBoom:HDHumanoid{
 	pain:
 		#### G 0 A_UpdateSprite();
 		#### G 6 A_Vocalize(painsound);
-		---- A 0 A_Jump(10,"roll.start");;
+		---- A 0 A_Jump(10,"roll.start");
 		#### AB 2 A_FaceTarget(50,50);
-		---- A 0 A_Jump(100,"roll.start");;
+		---- A 0 A_Jump(100,"roll.start");
 		#### CD 3 A_ChangeVelocity(
 			frandom(-2,2),
 			frandom(3,7)*randompick(-1,1),
