@@ -5,7 +5,7 @@
 class ZombieSniper:HDHumanoid{
 	default{
 		//$Category "Monsters/Hideous Destructor"
-		//$Title "Shotgun Guy"
+		//$Title "Sniper Guy"
 		//$Sprite "SPOSA1"
 
 		seesound "shotguy/sight";
