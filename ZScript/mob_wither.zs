@@ -31,6 +31,7 @@ class Wither:HDMobBase{
 		damagefactor "slashing",0.8;
 		damagefactor "piercing",0.8;
 	}
+	bool strafeleft;
 	override void postbeginplay(){
 		super.postbeginplay();
 		bonlyscreamondeath=true;
@@ -42,7 +43,6 @@ class Wither:HDMobBase{
 			A_StartSound("revenant/step",22,CHANF_OVERLAP,0.5,ATTN_NORM,1.5);
 		}
 	}
-	bool strafeleft;
 	void A_Strafe(){
 		A_FaceLastTargetPos(10);
 		strafeleft=(random(0,2))?blefthanded:!blefthanded;

@@ -376,7 +376,7 @@ class ZombieShield:HDHumanoid{
 		#### A 0 A_Jump(256,"gibbed");
 	gibbed:
 		#### R 3 {if(abs(vel.z)<2.)frame++;}
-		#### S 5  A_JumpIf(abs(vel.z)>=2.,"gibbed");
+		#### S 5 A_JumpIf(abs(vel.z)>=2.,"gibbed");
 		wait;
 	raise:
 		#### K 4;
