@@ -64,11 +64,66 @@ class ZombieSniper:HDHumanoid{
 			(10,0,0)
 		);
 	}
+	void A_LaserDot() {
+		//shoot a line out
+		flinetracedata hlt;
+		linetrace(
+			angle,4096,pitch,
+			flags:TRF_NOSKY,
+			offsetz:38,
+			data:hlt
+		);
+
+		if(
+			hlt.hittype!=Trace_HitNone
+			&&hlt.distance>0
+		){
+			let sc=GetScanDot();
+			if(!!sc){
+				bool interp=true;
+				if(sc.binvisible){
+					interp=false;
+					sc.binvisible=false;
+				}
+				sc.SetOrigin(hlt.hitlocation,interp);
+				sc.stamina=1;
+			}
+		}
+
+		//if the line hits a valid target, go into shooting state
+		actor hitactor=hlt.hitactor;
+		if(
+			hitactor
+			&&isHostile(hitactor)
+			&&hitactor.bshootable
+			&&!hitactor.bnotarget
+			&&!hitactor.bnevertarget
+			&&(hitactor.bismonster||hitactor.player)
+			&&(!hitactor.player||!(hitactor.player.cheats&CF_NOTARGET))
+			&&hitactor.health>random((hitactor.vel==(0,0,0))?0:-10,5)
+			&&hitactor.checksight(self)
+		){
+			target=hitactor;
+			if(curstate == ResolveState("holding"))setstatelabel("shoot");
+			if(hd_debug)A_Log(string.format("Sniper targeted %s",hitactor.getclassname()));
+			return;
+		}
+	}
+	actor scandot;
+	actor GetScanDot(){
+		if(!scandot){
+			let scdt=spawn("HERPScanDot",pos);
+			scdt.master=self;
+			scandot=scdt;
+		}
+		return scandot;
+	}
 	override void Tick(){
 		super.Tick();
 		if(HDMath.IsDead(self)) return;
-		if(frame==4||frame==5){
-			HDCore.emitLaserParticles(self, bfriendly?0x00FF00:0xFF0000, (-6, 0, 32), 1.0, 1.0);
+		if(frame==4||frame==5||(target&&chamber==2)){
+			HDCore.emitLaserParticles(self, bfriendly?0x00FF00:0xFF0000, (0, 0, 38), 1.0, 1.0);
+			A_LaserDot();
 		}
 	}
 	states{
@@ -136,7 +191,7 @@ class ZombieSniper:HDHumanoid{
 			angle+=frandom(0,spread)-frandom(0,spread);
 			pitch+=frandom(0,spread)-frandom(0,spread);
 			A_StartSound("weapons/bigrifle2",CHAN_WEAPON,CHANF_OVERLAP);
-			HDBulletActor.FireBullet(self,"HDB_776r",spread:0.5,speedfactor:0.8);
+			HDBulletActor.FireBullet(self,"HDB_776r",spread:1.0,speedfactor:0.8);
 			A_Recoil(0.4);
 		}
 		#### F 1{
